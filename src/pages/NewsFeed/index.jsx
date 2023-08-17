@@ -20,7 +20,7 @@ export const NewsFeed = () => {
     }, [])
 
     return (
-        <div className="w-full flex mt-4" id="portal-comment">
+        <div className="w-full flex mt-14" id="portal-comment">
             <aside className="asideEmpty w-3/12 flex-shrink-0 p-2 h-screen">
                 <div className="asidePadded w-100"></div>
             </aside>
