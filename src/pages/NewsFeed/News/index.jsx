@@ -1,41 +1,69 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {createPortal} from "react-dom";
 import CommentPostModal from "../CommentPostModal";
 import {FooterNews} from "./FooterNews";
 import {HeaderNews} from "./HeaderNews";
 import {getUserById} from "../../../utils/fetcher/users";
+import {deleteAReaction, getReaction, sendReactionToPost} from "../../../utils/fetcher/reactions";
+import {clientContext} from "../../../utils/context";
 
 
 export function Index({data}) {
+    const {userId} = useContext(clientContext);
     const [portal,setPortal] = useState(null);
     const [totalLike,setTotalLike] = useState(0);
     const [user, setUser] = useState({});
-
+    const [liked, setLikes] = useState(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchUser = async () => {
         try{
-           return await getUserById(data.userId);
+            const userData = await getUserById(data.userId)
+            const TotalLikePost = (
+                await getReaction(data.id)
+                    .then(v =>
+                        v.filter(v => v.type.match(/like/i))
+                            .length)
+            );
+            if(userData && TotalLikePost && !totalLike){
+                setUser(userData);
+                setTotalLike(TotalLikePost);
+            }
         }catch(e){
             console.log(e)
         }
     }
     
     useEffect(() => {
-        fetchUser().then(res => {
-            setUser(res);
+        fetchUser().catch(e => {
+            console.log(e);
         })
-    }, [])
-    
-    // Create a state variable for likes
-    const [liked, setLikes] = useState(false);
-
-    // Create a function to handle the click event
+    })
 
     const handleLikeClick = () => {
         setTotalLike(value => {
             if(!liked){
+                sendReactionToPost(data.id,{
+                    userId,
+                    type: "LIKE"
+                })
+                    .then(v => {
+                        console.log(v);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
                 return value + 1;
             }else{
+                deleteAReaction(data.id,{
+                    type: "LIKE",
+                    userId
+                })
+                    .then(v => {
+                        console.log(v);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
                 return value - 1;
             }
         })
@@ -80,6 +108,7 @@ export function Index({data}) {
             />
 
             <div className="news-content">
+                <div className="font-semibold text-lg">{data.title}</div>
                 <div className="text-container">{data.content}</div>
             </div>
 

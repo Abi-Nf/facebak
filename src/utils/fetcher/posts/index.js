@@ -1,5 +1,4 @@
 import {getRequest, postRequest} from "../methods";
-import axios from "axios";
 
 const host = 'http://localhost:8080';
 export const getPosts = async () => {
