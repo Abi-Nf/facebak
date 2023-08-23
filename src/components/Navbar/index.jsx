@@ -10,11 +10,10 @@ export const Navbar = () => {
                     <div className="flex gap-1.5">
                         <Link className="link-to-profile rounded-full bg-zinc-400 w-10 h-10 flex
                     items-center justify-center"
-                              to="/profile/--user"></Link>
+                              to="/profile/[username-here]"></Link>
                     </div>
                 </div>
             </header>
-            {/*<div className='h-14'/>*/}
         </>
     );
 }
