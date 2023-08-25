@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {Index} from "./News";
 import {getPosts} from "../../utils/fetcher/posts";
+import AsideLeft from "./AsideLeft";
 
 export const NewsFeed = () => {
     const [posts, setPosts] = useState([]);
@@ -21,9 +22,7 @@ export const NewsFeed = () => {
 
     return (
         <div className="w-full flex mt-14" id="portal-comment">
-            <aside className="asideEmpty w-3/12 flex-shrink-0 p-2 h-screen">
-                <div className="asidePadded w-100"></div>
-            </aside>
+            <AsideLeft/>
 
             <main className="mainPage flex flex-col gap-4 w-full">
                 {posts.map(post => {
